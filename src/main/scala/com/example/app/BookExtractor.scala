@@ -1,21 +1,17 @@
 package com.example.app
 
-import org.jsoup.nodes.{Element, Document}
-
-import scala.collection.JavaConverters._
-import scala.collection.immutable.IndexedSeq
+import org.jsoup.nodes.{TextNode, Element, Document}
 
 /**
   * Created by vinhbachsy on 1/1/16.
   */
 object BookExtractor {
   def extract(doc: Document, config: Map[String, Any]): Option[List[Map[String, Any]]] = config.get("item") match {
-    case Some(selector: String) => {
+    case Some(selector: String) =>
       val itemsElems = doc.select(selector)
       val items = for(index <- 0 until itemsElems.size) yield itemsElems.get(index)
       val results = items.toList.map(extractItem(_, config))
       Some(results)
-    }
     case _ => None
   }
 
@@ -30,11 +26,28 @@ object BookExtractor {
   }
 
   private def extractAttr(item: Element, config: Any): String = config match {
-    case SingleSelector(selector) => item.select(selector).first.text.trim
-    case SingleSelectorWithAttr(selector, attr) => item.select(selector).first.attr(attr).trim
-    case MultipleSelector(configs) => {
+    case SingleSelector(selector) =>
+      item.select(selector).first match {
+        case null => ""
+        case elem => elem.text.trim
+      }
+    case SingleSelectorWithAttr(selector, attr) =>
+      item.select(selector).first match {
+        case null => ""
+        case elem => extractAttrValue(elem, attr)
+      }
+    case MultipleSelector(configs) =>
       configs.map(extractAttr(item, _)).dropWhile(_.isEmpty).headOption.getOrElse("")
-    }
+    case _ => ""
+  }
+
+  private def extractAttrValue(elem: Element, attr: String): String = attr match {
+    case "textNode" => extractTextNodeValue(elem)
+    case `attr` => elem.attr(attr).trim
+  }
+
+  private def extractTextNodeValue(elem: Element): String = elem.childNode(0) match {
+    case node: TextNode => node.text.trim
     case _ => ""
   }
 

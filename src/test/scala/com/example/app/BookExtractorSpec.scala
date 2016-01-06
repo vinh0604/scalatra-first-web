@@ -18,7 +18,7 @@ class BookExtractorSpec extends FlatSpec with Matchers {
       "image" -> Map("selector" -> ".image > img", "attr" -> "src"),
       "link" -> Map("selector" -> "> a", "attr" -> "href"),
       "price" -> List(
-        Map("selector" -> ".price-sale"),
+        Map("selector" -> ".price-sale", "attr" -> "textNode"),
         Map("selector" -> ".price-regular")
       ))
     val html = Source.fromURL(getClass.getResource("/tiki.html")).getLines mkString "\n"
@@ -48,7 +48,7 @@ class BookExtractorSpec extends FlatSpec with Matchers {
     assert(results.map(_.getOrElse("price", "")) ==
       List("62.000 ₫",
         "",
-        "66.000 ₫",
-        "110.000 ₫"))
+        "110.000 ₫",
+        "66.000 ₫"))
   }
 }
