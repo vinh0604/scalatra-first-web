@@ -32,7 +32,8 @@ object ScalatraFirstWebBuild extends Build {
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
         "org.yaml" % "snakeyaml" % "1.16",
         "org.jsoup" % "jsoup" % "1.8.3",
-        "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4"
+        "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4",
+        "org.joda" % "joda-money" % "0.10.0"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
