@@ -11,12 +11,7 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * Created by vinhbachsy on 7/1/16.
  */
-class BookSelectorSpec extends FlatSpec with Matchers with BeforeAndAfterEach {
-  override def beforeEach() {
-    val countryCodes: java.util.List[String] = ArrayBuffer("vn")
-//    CurrencyUnit.registerCurrency("VND", 704, 0, countryCodes)
-  }
-
+class BookSelectorSpec extends FlatSpec with Matchers {
   it should "pick the most relevant book from the list" in {
     val books = List(
       Book("Tôi thấy hoa vàng trên cỏ xám", "Nguyễn Nhật Ánh", "", "", Money.of(CurrencyUnit.getInstance("VND"), BigDecimal(10000).bigDecimal)),
