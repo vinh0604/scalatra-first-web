@@ -35,8 +35,9 @@ object ScalatraFirstWebBuild extends Build {
         "com.rockymadden.stringmetric" %% "stringmetric-core" % "0.27.4",
         "org.joda" % "joda-money" % "0.10.0",
         "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
-        "net.databinder" % "dispatch-http_2.10" % "0.8.10",
-        "org.mock-server" % "mockserver-netty" % "3.10.2" % "test"
+        "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
+        "org.mock-server" % "mockserver-netty" % "3.10.2" % "test",
+        "com.typesafe" % "config" % "1.3.0"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
