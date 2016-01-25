@@ -1,5 +1,9 @@
 package com.example.app
 
+import com.netaporter.uri.Uri
+import com.netaporter.uri.config.UriConfig
+import com.netaporter.uri.encoding._
+import com.netaporter.uri.dsl._
 import dispatch.{Http, url, as}
 import org.jsoup.Jsoup
 
@@ -14,16 +18,29 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 
 object WebSoSanhAPI {
-  def request(keyword: String): Either[Throwable, List[Item]] = {
-//    val html = Http(url("http://websosanh.vn:80/s/t%c3%b4i+th%e1%ba%a5y+hoa+v%c3%a0ng+tr%c3%aan+c%e1%bb%8f+xanh/sort-price-1.htm") as_str)
+  implicit val uriConfig = UriConfig(encoder = percentEncode + spaceAsPlus)
+  def request(keyword: String, redirectingURL: RedirectingURL): Either[Throwable, List[Item]] = {
     val domain = Config().getString("websosanh.domain")
-    val req = Http(url(s"$domain/s/t%C3%B4i+th%E1%BA%A5y+hoa+v%C3%A0ng+tr%C3%AAn+c%E1%BB%8F+xanh/sort-price-1.htm") OK as.String)
+    var uri: Uri = s"$domain/s/$keyword/sort-price-1.htm"
+    val req = Http(url(uri.toString) OK as.String)
     Await.ready(req, 30.seconds).value.get match {
       case Success(html) => {
         val doc = Jsoup.parse(html)
-        Right(WebSoSanhParser.parse(doc))
+        Right(getItemsURL(WebSoSanhParser.parse(doc), redirectingURL))
       }
       case Failure(ex) => Left(ex)
+    }
+  }
+
+  private def getItemsURL(items: List[Item], redirectingURL: RedirectingURL): List[Item] = {
+    val links = items.map(item => redirectingURL.getRedirectedURL(item.link))
+    Await.ready(Future.sequence(links), 30.seconds).value.get match {
+      case Success(links) => {
+        items.zip(links).map(el => {
+          el._1.copy(el._1.title, el._1.store, el._2)
+        })
+      }
+      case Failure(ex) => items
     }
   }
 }

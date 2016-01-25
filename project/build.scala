@@ -37,7 +37,8 @@ object ScalatraFirstWebBuild extends Build {
         "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
         "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
         "org.mock-server" % "mockserver-netty" % "3.10.2" % "test",
-        "com.typesafe" % "config" % "1.3.0"
+        "com.typesafe" % "config" % "1.3.0",
+        "com.netaporter" %% "scala-uri" % "0.4.12"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
