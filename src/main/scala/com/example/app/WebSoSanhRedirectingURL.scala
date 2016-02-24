@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Created by vinhbachsy on 24/1/16.
  */
-object WebSoSanhRedirectingURL {
+object WebSoSanhRedirectingURL extends RedirectingURL {
   def getRedirectedURL(redirecting_url: String): Future[String] = {
     val req = Http(url(redirecting_url) OK as.String)
     req.map(extractRedirectedURLFromHTML(_))

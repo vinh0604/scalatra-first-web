@@ -38,7 +38,9 @@ object ScalatraFirstWebBuild extends Build {
         "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
         "org.mock-server" % "mockserver-netty" % "3.10.2" % "test",
         "com.typesafe" % "config" % "1.3.0",
-        "com.netaporter" %% "scala-uri" % "0.4.12"
+        "com.netaporter" %% "scala-uri" % "0.4.12",
+        "org.scalatra" %% "scalatra-json" % "2.4.0",
+        "org.json4s"   %% "json4s-jackson" % "3.3.0"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
@@ -51,7 +53,11 @@ object ScalatraFirstWebBuild extends Build {
             Some("templates")
           )
         )
-      }
+      },
+      javaOptions ++= Seq(
+        "-Xdebug",
+        "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+      )
     )
   ).enablePlugins(JettyPlugin)
 }
