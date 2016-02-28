@@ -1,7 +1,7 @@
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 import sbt._
 import Keys._
 import org.scalatra.sbt._
-import org.scalatra.sbt.PluginKeys._
 import com.earldouglas.xwp.JettyPlugin
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
@@ -12,6 +12,7 @@ object ScalatraFirstWebBuild extends Build {
   val Version = "0.1.0-SNAPSHOT"
   val ScalaVersion = "2.11.7"
   val ScalatraVersion = "2.4.0"
+  var JettyVersion = "9.2.14.v20151106"
 
   lazy val project = Project (
     "scalatra-first-web",
@@ -28,7 +29,8 @@ object ScalatraFirstWebBuild extends Build {
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
         "ch.qos.logback" % "logback-classic" % "1.1.3" % "runtime",
-        "org.eclipse.jetty" % "jetty-webapp" % "9.2.14.v20151106" % "container",
+        "org.eclipse.jetty" % "jetty-webapp" % JettyVersion % "container;compile",
+        "org.eclipse.jetty" % "jetty-plus" % JettyVersion % "container;compile",
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
         "org.yaml" % "snakeyaml" % "1.16",
         "org.jsoup" % "jsoup" % "1.8.3",
@@ -59,5 +61,5 @@ object ScalatraFirstWebBuild extends Build {
         "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
       )
     )
-  ).enablePlugins(JettyPlugin)
+  ).enablePlugins(JavaAppPackaging).enablePlugins(JettyPlugin)
 }

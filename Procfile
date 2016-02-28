@@ -1,0 +1,1 @@
+web: target/universal/stage/bin/scalatra-first-web -Dhttp.port=$PORT
