@@ -5,6 +5,7 @@ import org.scalatra.sbt._
 import com.earldouglas.xwp.JettyPlugin
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
+import org.flywaydb.sbt.FlywayPlugin.autoImport._
 
 object ScalatraFirstWebBuild extends Build {
   val Organization = "vinhbachsy"
@@ -24,6 +25,9 @@ object ScalatraFirstWebBuild extends Build {
       scalaVersion := ScalaVersion,
       resolvers += Classpaths.typesafeReleases,
       resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
+      resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/maven-releases/",
+      flywayUrl := "jdbc:postgresql://127.0.0.1:5432/websosanh",
+      flywayUser := "vinhbachsy",
       libraryDependencies ++= Seq(
         "org.scalatra" %% "scalatra" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
@@ -42,7 +46,9 @@ object ScalatraFirstWebBuild extends Build {
         "com.typesafe" % "config" % "1.3.0",
         "com.netaporter" %% "scala-uri" % "0.4.12",
         "org.scalatra" %% "scalatra-json" % "2.4.0",
-        "org.json4s"   %% "json4s-jackson" % "3.3.0"
+        "org.json4s"   %% "json4s-jackson" % "3.3.0",
+        "org.postgresql" % "postgresql" % "9.4-1206-jdbc42",
+        "com.github.dnvriend" %% "akka-persistence-jdbc" % "2.2.17"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(
